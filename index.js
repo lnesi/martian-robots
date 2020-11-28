@@ -31,35 +31,55 @@ class Planet {
 
 class Robot {
   constructor(iniPos = ["0", "0", "N"], instructions) {
+    this.lost = false;
     this.planet = null;
-    this.position = [parseInt(iniPos[0]), parseInt(iniPos[1])];
+    this.position = { x: parseInt(iniPos[0]), y: parseInt(iniPos[1]) };
     this.orientation = iniPos[2];
     this.uuid = this.uuid = uuidv4();
     this.instructions = instructions;
   }
 
   followInstructions() {
-    for (var i = 0; i < this.instructions.lengthl; i++) {
+    //console.log(this.instructions, this.position, this.orientation);
+
+    for (var i = 0; i < this.instructions.length; i++) {
       switch (this.instructions[i]) {
         case "L":
-          this.rotate("L");
-          break;
         case "R":
-          this.rotate("R");
+          this.rotate(this.instructions[i]);
           break;
         case "F":
-          switch (this.orientation) {
-            case "N":
-              break;
-            case "S":
-
-            case "E":
-
-            case "W":
+          if (this.canMove(this.orientation)) {
+            switch (this.orientation) {
+              case "N":
+                this.position.y += 1;
+                break;
+              case "S":
+                this.position.y -= 1;
+                break;
+              case "E":
+                this.position.x += 1;
+                break;
+              case "W":
+                this.position.x -= 1;
+                break;
+            }
           }
           break;
       }
+      this.isLost();
     }
+    console.log(this);
+  }
+  canMove() {
+    return true;
+  }
+  isLost() {
+    this.lost =
+      this.position.x >= this.planet.grid.length ||
+      this.position.x < 0 ||
+      this.position.y < 0 ||
+      this.position.y >= this.planet.grid[0].length;
   }
   rotate(direction) {
     switch (direction) {
@@ -109,7 +129,7 @@ for (var i = 0; i < input.length; i += 2) {
   mars.addRobot(new Robot(input[i].split(" "), Array.from(input[i + 1])));
 }
 
-console.log(mars);
+//console.log(mars);
 
 for (var i = 0; i < robotCount; i++) {
   mars.robots[i].followInstructions();
