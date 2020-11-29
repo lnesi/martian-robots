@@ -1,5 +1,11 @@
 # Martian Robots
 
+## Install
+
+```
+npm install
+```
+
 ## Run
 
 Write the require input into input.txt and then
